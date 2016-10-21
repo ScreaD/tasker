@@ -1,6 +1,7 @@
 package controllers;
 
 import dao.DaoFactory;
+import dao.DoneTaskDao;
 import dao.TaskDao;
 import model.Task;
 import views.View;
@@ -15,11 +16,13 @@ public class Controller {
     private DaoFactory daoFactory;
     private Connection connection;
     private TaskDao taskDao;
+    private DoneTaskDao doneTaskDao;
     private View view;
     private int level;
 
-    public Controller(DaoFactory daoFactory) {
+    public Controller(DaoFactory daoFactory, View view) {
         this.daoFactory = daoFactory;
+        this.view = view;
         connection = null;
         try {
             connection = daoFactory.getConnection();
@@ -27,7 +30,7 @@ public class Controller {
             e.printStackTrace();
         }
         taskDao = daoFactory.getTaskDao(connection);
-        view = new View();
+        doneTaskDao = daoFactory.getDoneTaskDao(connection);
         level = 1;
     }
 
@@ -86,12 +89,6 @@ public class Controller {
         return menu.toString();
     }
 
-    public void run() {
-        do {
-            printCurrentMenu();
-        } while (!view.prompt().equals("q"));
-    }
-
     private void printCurrentMenu() {
         String menuToMeShowed;
 
@@ -113,6 +110,12 @@ public class Controller {
         }
 
         view.showMenu(menuToMeShowed);
+    }
+
+    public void run() {
+        do {
+            printCurrentMenu();
+        } while (!view.prompt().equals("q"));
     }
 
 
