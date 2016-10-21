@@ -16,6 +16,7 @@ public class Controller {
     private Connection connection;
     private TaskDao taskDao;
     private View view;
+    private int level;
 
     public Controller(DaoFactory daoFactory) {
         this.daoFactory = daoFactory;
@@ -27,23 +28,24 @@ public class Controller {
         }
         taskDao = daoFactory.getTaskDao(connection);
         view = new View();
+        level = 1;
     }
 
-    public void mainMenu() {
+    private String mainMenu() {
         String mainMenu = "\n1) Добавить задачу;\n" +
                 "2) Вывести список задач;\n" +
                 "3) Выйти.";
-        view.showMenu(mainMenu);
+        return mainMenu;
     }
 
-    public void addTaskMenu() {
+    private String addTaskMenu() {
         String addMenu = "\n1) Название задачи: \n" +
                 "2) Когда должна быть выполнена;\n" +
                 "3) Приоритет.";
-        view.showMenu(addMenu);
+        return addMenu;
     }
 
-    public void TaskListMenu() {
+    private String taskListMenu() {
         StringBuilder menu = new StringBuilder()
                 .append("\n1) Выводиться список задач, если задача просрочена она помечается как просроченная. \n")
                 .append("2) На екране можно указать какая задача закончена, когда задача заканчивается она \n")
@@ -63,7 +65,55 @@ public class Controller {
                     .append("\nEnd date: " + task.getDate())
                     .append("\nPriority: " + task.getPriority());
         }
-        view.showMenu(menu.toString());
+        return menu.toString();
     }
+
+    private String doneListTasksMenu() {
+        StringBuilder menu = new StringBuilder()
+                .append("\n\nСписок завершенных заданий:");
+
+        List<Task> tasks = new ArrayList<>();
+        try {
+            tasks = taskDao.getAll();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        for (Task task : tasks) {
+            menu.append("\n\nName: " + task.getName())
+                    .append("\nEnd date: " + task.getDate())
+                    .append("\nPriority: " + task.getPriority());
+        }
+        return menu.toString();
+    }
+
+    public void run() {
+        do {
+            printCurrentMenu();
+        } while (!view.prompt().equals("q"));
+    }
+
+    private void printCurrentMenu() {
+        String menuToMeShowed;
+
+        switch (level) {
+            case 1:
+                menuToMeShowed = mainMenu();
+                break;
+            case 2:
+                menuToMeShowed = addTaskMenu();
+                break;
+            case 3:
+                menuToMeShowed = taskListMenu();
+                break;
+            case 4:
+                menuToMeShowed = doneListTasksMenu();
+                break;
+            default:
+                menuToMeShowed = mainMenu();
+        }
+
+        view.showMenu(menuToMeShowed);
+    }
+
 
 }
