@@ -9,6 +9,17 @@ public class Task {
     private String priority;
     private String name;
 
+    public Task() {
+
+    }
+
+    public Task(int id, String name, Date estimation_time, String priority) {
+        this.id = id;
+        this.name = name;
+        date = estimation_time;
+        this.priority = priority;
+    }
+
     public String getName() {
         return name;
     }
