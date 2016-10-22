@@ -4,7 +4,7 @@ import java.util.List;
 
 public interface TaskManager {
 
-    void add(Task task);
+    boolean add(Task task);
 
     List<Task> getAll();
 

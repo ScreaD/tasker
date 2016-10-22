@@ -15,11 +15,12 @@ public final class TaskManagerDao implements TaskManager {
     }
 
     @Override
-    public void add(Task task) {
+    public boolean add(Task task) {
         try {
             taskDao.add(task);
+            return true;
         } catch (SQLException e) {
-            e.printStackTrace();
+            return false;
         }
     }
 
@@ -28,7 +29,6 @@ public final class TaskManagerDao implements TaskManager {
         try {
             return taskDao.getAll();
         } catch (SQLException e) {
-            e.printStackTrace();
             return null;
         }
     }
@@ -38,7 +38,6 @@ public final class TaskManagerDao implements TaskManager {
         try {
             return taskDao.get(id);
         } catch (SQLException e) {
-            e.printStackTrace();
             return null;
         }
     }
@@ -48,7 +47,6 @@ public final class TaskManagerDao implements TaskManager {
         try {
             return taskDao.delete(id);
         } catch (SQLException e) {
-            e.printStackTrace();
             return false;
         }
     }
@@ -59,7 +57,6 @@ public final class TaskManagerDao implements TaskManager {
         try {
             task = taskDao.get(id);
         } catch (SQLException e) {
-            e.printStackTrace();
             return false;
         }
         if (task != null) {
@@ -68,7 +65,6 @@ public final class TaskManagerDao implements TaskManager {
                 taskDao.update(task.getId(), task);
                 return true;
             } catch (SQLException e) {
-                e.printStackTrace();
                 return false;
             }
         }
@@ -80,7 +76,6 @@ public final class TaskManagerDao implements TaskManager {
         try {
             return taskDao.getAllIsDone(true);
         } catch (SQLException e) {
-            e.printStackTrace();
             return null;
         }
     }
@@ -90,7 +85,6 @@ public final class TaskManagerDao implements TaskManager {
         try {
             return taskDao.getAllIsDone(false);
         } catch (SQLException e) {
-            e.printStackTrace();
             return null;
         }
     }
