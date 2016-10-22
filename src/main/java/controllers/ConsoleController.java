@@ -23,6 +23,6 @@ public final class ConsoleController extends Controller {
 
             userResponse = view.prompt();
             userInputResolver(userResponse);
-        } while (!"q".equals(userResponse));
+        } while (!"q".equals(userResponse) && level != 0);
     }
 }

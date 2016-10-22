@@ -7,7 +7,6 @@ import views.View;
 import java.sql.Date;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.InputMismatchException;
 import java.util.List;
 
 public abstract class Controller {
@@ -17,49 +16,68 @@ public abstract class Controller {
     protected TaskManager taskManager;
 
     private String mainMenu() {
-        String mainMenu = "\n1) Добавить задачу;\n" +
-                "2) Вывести список задач;\n" +
-                "3) Выйти.";
+        String mainMenu = "Main menu" +
+                "\n_________________________" +
+                "\n1) Add task;\n" +
+                "2) Show all tasks;\n" +
+                "3) Exit.";
         return mainMenu;
     }
 
     private String addTaskMenu() {
-        String addMenu = "\nAdd task menu." +
-                "Name;Date(YYYY-DD-MM format);Priority(low, medium, high)";
+        String addMenu = "\nAdd new task menu" +
+                "\n_________________________" +
+                "\nPlease enter information such as: " +
+                "name, end date and priority " +
+                "\n\nRequirements:" +
+                "\nAll info should be split with \";\" symbol" +
+                "\nInput date format: YYYY-DD-MM" +
+                "\nAvailable priority: low, medium, high" +
+                "\n\nExample: Buy tickets;2016-24-10;medium\n";
         return addMenu;
     }
 
     private String taskListMenu() {
         StringBuilder menu = new StringBuilder()
-                .append("\n1) Выводиться список задач, если задача просрочена она помечается как просроченная. \n")
-                .append("2) На екране можно указать какая задача закончена, когда задача заканчивается она \n")
-                .append("переноситься в другую таблицу и видна при выборе всех завершенных. \n")
-                .append("3) На екране можно запросить вывод всех завершённых задач \n")
-                .append("4) На екране можно вернуться в основе меню/екран")
-                .append("\n\nСписок заданий:");
+                .append("\nTask list:")
+                .append("\n___________________");
 
         List<Task> tasks = taskManager.getAllUndone();
 
         for (Task task : tasks) {
-            menu.append("\n\nName: " + task.getName())
+            menu.append("\nId:  " + task.getId())
+                    .append("\nName: " + task.getName())
                     .append("\nEnd date: " + task.getDate())
-                    .append("\nPriority: " + task.getPriority());
+                    .append("\nPriority: " + task.getPriority())
+                    .append("\n___________________");
         }
+
+        menu.append("\n1) Indicate completed task; \n")
+                .append("2) Show all completed tasks; \n")
+                .append("3) Back to main menu. \n");
+
         return menu.toString();
     }
 
     private String doneListTasksMenu() {
         StringBuilder menu = new StringBuilder()
-                .append("\n\nСписок завершенных заданий:");
+                .append("\nList completed tasks:")
+                .append("\n___________________");
+
 
         List<Task> tasks = taskManager.getAllDone();
 
         for (Task task : tasks) {
-            menu.append("id: ")
-                    .append("\n\nName: " + task.getName())
+            menu.append("\nId: " + task.getId())
+                    .append("\nName: " + task.getName())
                     .append("\nEnd date: " + task.getDate())
-                    .append("\nPriority: " + task.getPriority());
+                    .append("\nPriority " + task.getPriority())
+                    .append("\n___________________");
         }
+
+        menu.append("\n1) Back to previous menu;")
+                .append("\n2) Back to main menu.");
+
         return menu.toString();
     }
 
@@ -87,11 +105,11 @@ public abstract class Controller {
                 break;
         }
 
-        view.showMenu(menuToMeShowed);
+        view.showMessage(menuToMeShowed);
     }
 
     private String closeTaskMenu() {
-        return "Enter task id: ";
+        return "Enter task id, that you have completed: ";
     }
 
     protected void userInputResolver(String userResponse) {
@@ -111,12 +129,12 @@ public abstract class Controller {
                 doneListTasksMenuResolver(userResponse);
                 break;
             case 5:
-                closeTaskMenuResolver(userResponse);
+                completeTaskMenuResolver(userResponse);
                 break;
         }
     }
 
-    private void closeTaskMenuResolver(String userResponse) {
+    private void completeTaskMenuResolver(String userResponse) {
         userResponse = parseResponse(userResponse);
         Integer id = Integer.parseInt(userResponse);
 
@@ -124,6 +142,7 @@ public abstract class Controller {
             incorrectInput();
         }
 
+        view.showMessage("Task with id = " + id + " now completed!");
         level = 3;
     }
 
@@ -169,25 +188,27 @@ public abstract class Controller {
         String[] params = userResponse.split(";");
         if (params.length == 3) {
             task.setName(params[0]);
-            task.setDate(parseDate(params[1]));
+            try {
+                task.setDate(parseDate(params[1]));
+            } catch (ParseException e) {
+                incorrectInput();
+                level = 2;
+                return;
+            }
             task.setPriority(params[2]);
+
             taskManager.add(task);
+            view.showMessage("Task were added successfully!\n");
+            level = 1;
         } else {
             incorrectInput();
             level = 2;
         }
-
-        level = 1;
     }
 
-    private Date parseDate(String param) {
+    private Date parseDate(String param) throws ParseException {
         SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
-        java.util.Date parsed = null;
-        try {
-            parsed = format.parse(param);
-        } catch (ParseException e) {
-            incorrectInput();
-        }
+        java.util.Date parsed = format.parse(param);
         return new Date(parsed.getTime());
     }
 
@@ -210,7 +231,7 @@ public abstract class Controller {
     }
 
     private void incorrectInput() {
-        view.showMenu("Incorrect input");
+        view.showMessage("Incorrect input. Try again");
     }
 
     protected abstract String parseResponse(String userResponse);

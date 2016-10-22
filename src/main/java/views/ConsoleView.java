@@ -12,7 +12,7 @@ public final class ConsoleView implements View {
         br = new BufferedReader(new InputStreamReader(System.in));
     }
 
-    public void showMenu(String menu) {
+    public void showMessage(String menu) {
         System.out.println(menu);
     }
 

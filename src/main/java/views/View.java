@@ -2,7 +2,7 @@ package views;
 
 public interface View {
 
-    void showMenu(String menu);
+    void showMessage(String menu);
 
     String prompt();
 
