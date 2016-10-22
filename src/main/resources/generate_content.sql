@@ -1,8 +1,8 @@
-INSERT INTO `tasker`. `tasks` (`name`, `estimation_time`, `priority`) VALUES
-  ('task1', '2010-09-01', 'low'),
-  ('task2', '2010-09-01', 'low'),
-  ('task3', '2010-09-01', 'low'),
-  ('task4', '2010-09-01', 'high'),
-  ('task5', '2010-09-01', 'low'),
-  ('task6', '2010-09-01', 'medium'),
-  ('task7', '2010-09-01', 'low');
+INSERT INTO `tasker`. `tasks` (`name`, `estimation_time`, `priority`, `done`) VALUES
+  ('task1', '2016-10-21', 'low', FALSE),
+  ('task2', '2016-10-25', 'low', FALSE),
+  ('task3', '2016-10-21', 'low', TRUE),
+  ('task4', '2016-10-21', 'high', FALSE),
+  ('task5', '2016-10-26', 'low', TRUE),
+  ('task6', '2016-10-21', 'medium', FALSE),
+  ('task7', '2016-10-26', 'low', FALSE);
