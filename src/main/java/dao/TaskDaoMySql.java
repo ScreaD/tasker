@@ -2,19 +2,31 @@ package dao;
 
 import model.Task;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
-public class TaskDaoImpl implements TaskDao {
+public class TaskDaoMySql implements TaskDao {
 
     private Connection connection;
 
-    public TaskDaoImpl(Connection connection) {
-        this.connection = connection;
+    // is it necessary to store this data, if need only connection
+//    private final String user;
+//    private final String password;
+//    private final String url;
+//    private final Driver driver;
+
+    public TaskDaoMySql(String user, String password, String url, Driver driver) {
+        try {
+            DriverManager.registerDriver(driver);
+            this.connection = DriverManager.getConnection(url, user, password);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+//        this.user = user;
+//        this.password = password;
+//        this.url = url;
+//        this.driver = driver;
     }
 
     public void add(Task task) throws SQLException {

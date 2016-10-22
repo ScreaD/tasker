@@ -5,9 +5,10 @@ import java.sql.Date;
 public class Task {
 
     private Integer id;
+    private String name;
     private Date date;
     private String priority;
-    private String name;
+    private boolean done;
 
     public Task() {
 
@@ -50,5 +51,13 @@ public class Task {
 
     public void setId(Integer id) {
         this.id = id;
+    }
+
+    public boolean isDone() {
+        return done;
+    }
+
+    public void setDone(boolean done) {
+        this.done = done;
     }
 }
