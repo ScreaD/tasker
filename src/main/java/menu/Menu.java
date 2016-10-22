@@ -1,6 +1,6 @@
 package menu;
 
-public class Menu {
+public final class Menu {
 
     public static final String MAIN_MENU = "Main menu" +
             "\n_________________________" +

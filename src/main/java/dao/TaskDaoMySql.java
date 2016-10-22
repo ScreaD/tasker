@@ -3,19 +3,12 @@ package dao;
 import model.Task;
 
 import java.sql.*;
-import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
 public final class TaskDaoMySql implements TaskDao {
 
     private Connection connection;
-
-    // is it necessary to store this data, if need only connection
-//    private final String user;
-//    private final String password;
-//    private final String url;
-//    private final Driver driver;
 
     public TaskDaoMySql(String user, String password, String url, Driver driver) {
         try {
@@ -24,10 +17,6 @@ public final class TaskDaoMySql implements TaskDao {
         } catch (SQLException e) {
             e.printStackTrace();
         }
-//        this.user = user;
-//        this.password = password;
-//        this.url = url;
-//        this.driver = driver;
     }
 
     public void add(Task task) throws SQLException {

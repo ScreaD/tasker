@@ -1,5 +1,7 @@
 package views;
 
+import menu.Menu;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -22,7 +24,7 @@ public final class ConsoleView implements View {
         try {
             input = br.readLine();
         } catch (IOException e) {
-            e.printStackTrace();
+            showMessage(Menu.INCORRECT_INPUT);
         }
 
         return input;
