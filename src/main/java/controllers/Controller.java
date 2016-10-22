@@ -1,6 +1,7 @@
 package controllers;
 
 import menu.Menu;
+import model.Priority;
 import model.Task;
 import model.TaskManager;
 import views.View;
@@ -184,7 +185,14 @@ public abstract class Controller {
                 return;
             }
 
-            task.setPriority(params[2]);
+            Priority priority;
+            try {
+                priority = Priority.valueOf(params[2].toUpperCase());
+            } catch (IllegalArgumentException e) {
+                incorrectInput();
+                return;
+            }
+            task.setPriority(priority);
 
             if (taskManager.add(task)) {
                 view.showMessage(SUCCESSFUL_ADDED_TASK);

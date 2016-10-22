@@ -7,14 +7,14 @@ public final class Task {
     private Integer id;
     private String name;
     private Date date;
-    private String priority;
+    private Priority priority;
     private boolean done;
 
     public Task() {
 
     }
 
-    public Task(int id, String name, Date estimation_time, String priority) {
+    public Task(int id, String name, Date estimation_time, Priority priority) {
         this.id = id;
         this.name = name;
         date = estimation_time;
@@ -29,11 +29,11 @@ public final class Task {
         this.name = name;
     }
 
-    public String getPriority() {
+    public Priority getPriority() {
         return priority;
     }
 
-    public void setPriority(String priority) {
+    public void setPriority(Priority priority) {
         this.priority = priority;
     }
 
@@ -60,4 +60,5 @@ public final class Task {
     public void setDone(boolean done) {
         this.done = done;
     }
+
 }

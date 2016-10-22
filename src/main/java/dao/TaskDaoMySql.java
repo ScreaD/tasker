@@ -1,5 +1,6 @@
 package dao;
 
+import model.Priority;
 import model.Task;
 
 import java.sql.*;
@@ -25,7 +26,7 @@ public final class TaskDaoMySql implements TaskDao {
         PreparedStatement stm = connection.prepareStatement(sql);
         stm.setString(1, task.getName());
         stm.setDate(2, task.getDate());
-        stm.setString(3, task.getPriority());
+        stm.setString(3, task.getPriority().toString());
 
         stm.executeUpdate();
     }
@@ -45,7 +46,8 @@ public final class TaskDaoMySql implements TaskDao {
         ResultSet rs = stm.executeQuery();
 
         if (rs.next()) {
-            return new Task(id, rs.getString("name"), rs.getDate("estimation_time"), rs.getString("priority"));
+            Priority priority = Priority.valueOf(rs.getString("priority"));
+            return new Task(id, rs.getString("name"), rs.getDate("estimation_time"), priority);
         }
         return null;
     }
@@ -68,7 +70,7 @@ public final class TaskDaoMySql implements TaskDao {
 
         stm.setString(1, toTask.getName());
         stm.setDate(2, toTask.getDate());
-        stm.setString(3, toTask.getPriority());
+        stm.setString(3, toTask.getPriority().toString());
         stm.setBoolean(4, toTask.isDone());
         stm.setInt(5, id);
 
@@ -93,7 +95,7 @@ public final class TaskDaoMySql implements TaskDao {
             task.setId(rs.getInt("id"));
             task.setName(rs.getString("name"));
             task.setDate(rs.getDate("estimation_time"));
-            task.setPriority(rs.getString("priority"));
+            task.setPriority(Priority.valueOf(rs.getString("priority")));
             task.setDone(rs.getBoolean("done"));
             result.add(task);
         }

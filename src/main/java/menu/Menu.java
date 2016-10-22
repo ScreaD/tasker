@@ -15,8 +15,8 @@ public final class Menu {
             "\n\nRequirements:" +
             "\nAll info should be split with \";\" symbol" +
             "\nInput date format: YYYY-MM-DD" +
-            "\nAvailable priority: low, medium, high" +
-            "\n\nExample: Buy tickets;2016-24-10;medium\n";
+            "\nAvailable priority: low, medium or high" +
+            "\n\nExample: Buy tickets;2016-10-24;medium\n";
 
     public static final String TASK_LIST_HEADER = "\nTask list:\n___________________";
     public static final String TASK_ID = "\nId:  ";
