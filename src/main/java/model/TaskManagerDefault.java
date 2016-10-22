@@ -5,12 +5,12 @@ import dao.TaskDao;
 import java.sql.SQLException;
 import java.util.List;
 
-public final class TaskManagerDao implements TaskManager {
+public final class TaskManagerDefault implements TaskManager {
 
 
     private final TaskDao taskDao;
 
-    public TaskManagerDao(TaskDao taskDao) {
+    public TaskManagerDefault(TaskDao taskDao) {
         this.taskDao = taskDao;
     }
 
