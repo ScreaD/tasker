@@ -31,7 +31,7 @@ public abstract class Controller {
                 "name, end date and priority " +
                 "\n\nRequirements:" +
                 "\nAll info should be split with \";\" symbol" +
-                "\nInput date format: YYYY-DD-MM" +
+                "\nInput date format: YYYY-MM-DD" +
                 "\nAvailable priority: low, medium, high" +
                 "\n\nExample: Buy tickets;2016-24-10;medium\n";
         return addMenu;
@@ -48,8 +48,13 @@ public abstract class Controller {
             menu.append("\nId:  " + task.getId())
                     .append("\nName: " + task.getName())
                     .append("\nEnd date: " + task.getDate())
-                    .append("\nPriority: " + task.getPriority())
-                    .append("\n___________________");
+                    .append("\nPriority: " + task.getPriority());
+
+            if (new Date(new java.util.Date().getTime()).getTime() > task.getDate().getTime()) {
+                menu.append("\nTask is overdue!");
+            }
+
+            menu.append("\n___________________");
         }
 
         menu.append("\n1) Indicate completed task; \n")
