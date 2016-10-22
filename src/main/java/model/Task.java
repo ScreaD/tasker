@@ -2,7 +2,7 @@ package model;
 
 import java.sql.Date;
 
-public class Task {
+public final class Task {
 
     private Integer id;
     private String name;

@@ -12,7 +12,7 @@ import views.View;
 
 import java.sql.SQLException;
 
-public class Runner {
+public final class Runner {
 
     public static void main(String[] args) throws SQLException {
         // load properties

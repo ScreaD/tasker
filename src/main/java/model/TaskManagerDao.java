@@ -5,7 +5,7 @@ import dao.TaskDao;
 import java.sql.SQLException;
 import java.util.List;
 
-final public class TaskManagerDao implements TaskManager {
+public final class TaskManagerDao implements TaskManager {
 
 
     private final TaskDao taskDao;

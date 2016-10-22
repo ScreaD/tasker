@@ -6,7 +6,7 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
-public class TaskDaoMySql implements TaskDao {
+public final class TaskDaoMySql implements TaskDao {
 
     private Connection connection;
 

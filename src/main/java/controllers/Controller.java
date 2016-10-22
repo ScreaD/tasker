@@ -84,7 +84,7 @@ public abstract class Controller {
         view.showMenu(menuToMeShowed);
     }
 
-    private void userInputResolver(String userResponse, int level) {
+    protected void userInputResolver(String userResponse) {
         userResponse = parseResponse(userResponse);
 
         switch (level) {
@@ -108,11 +108,9 @@ public abstract class Controller {
     }
 
     private void taskListMenuResolver(String userResponse) {
-
     }
 
     private void addTaskMenuResolver(String userResponse) {
-        addTaskMenu();
         Task task = new Task();
 
         String[] params = userResponse.split(";");
@@ -122,6 +120,7 @@ public abstract class Controller {
             task.setPriority(params[2]);
         } else {
             incorrectInput();
+            level = 2;
         }
 
         taskManager.add(task);
@@ -140,7 +139,6 @@ public abstract class Controller {
     }
 
     private void mainMenuResolver(String userResponse) {
-        mainMenu();
         switch (userResponse) {
             case "1":
                 level = 2;
@@ -158,7 +156,7 @@ public abstract class Controller {
     }
 
     private void incorrectInput() {
-        view.showMenu("Incorrect input"); //TODO: add again input
+        view.showMenu("Incorrect input");
     }
 
     protected abstract String parseResponse(String userResponse);

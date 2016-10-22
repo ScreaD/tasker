@@ -19,10 +19,10 @@ public final class ConsoleController extends Controller {
     public void run() {
         String userResponse;
         do {
-//            userInputResolver()
-            // user input resolver
             printCurrentMenu();
+
             userResponse = view.prompt();
+            userInputResolver(userResponse);
         } while (!"q".equals(userResponse));
     }
 }

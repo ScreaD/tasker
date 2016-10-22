@@ -4,7 +4,7 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 
-public class ConsoleView implements View {
+public final class ConsoleView implements View {
 
     BufferedReader br = null;
 
