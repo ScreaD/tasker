@@ -4,6 +4,7 @@ import model.Task;
 
 import java.sql.*;
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 
 public final class TaskDaoMySql implements TaskDao {
@@ -44,18 +45,8 @@ public final class TaskDaoMySql implements TaskDao {
         String sql = "SELECT * FROM tasks;";
         PreparedStatement stm = connection.prepareStatement(sql);
         ResultSet rs = stm.executeQuery();
-        List<Task> result = new ArrayList<>();
 
-        while (rs.next()) {
-            Task task = new Task();
-            task.setId(rs.getInt("id"));
-            task.setName(rs.getString("name"));
-            task.setDate(rs.getDate("estimation_time"));
-            task.setPriority(rs.getString("priority"));
-            result.add(task);
-        }
-
-        return result;
+        return getTasksFromResultSet(rs);
     }
 
     public Task get(int id) throws SQLException {
@@ -79,5 +70,45 @@ public final class TaskDaoMySql implements TaskDao {
             return true;
         }
         return false;
+    }
+
+    @Override
+    public void update(int id, Task toTask) throws SQLException {
+        String sql = "UPDATE tasks SET name = ?, estimation_time = ?, priority = ?, done = ? WHERE id = ?;";
+        PreparedStatement stm = connection.prepareStatement(sql);
+
+        stm.setString(1, toTask.getName());
+        stm.setDate(2, toTask.getDate());
+        stm.setString(3, toTask.getPriority());
+        stm.setBoolean(4, toTask.isDone());
+        stm.setInt(5, id);
+
+        stm.executeUpdate();
+    }
+
+    @Override
+    public List<Task> getAllIsDone(boolean done) throws SQLException {
+        String sql = "SELECT * FROM tasks WHERE done = ?;";
+        PreparedStatement stm = connection.prepareStatement(sql);
+        stm.setBoolean(1, done);
+        ResultSet rs = stm.executeQuery();
+
+        return getTasksFromResultSet(rs);
+    }
+
+    private List<Task> getTasksFromResultSet(ResultSet rs) throws SQLException {
+        List<Task> result = new LinkedList<>();
+
+        while (rs.next()) {
+            Task task = new Task();
+            task.setId(rs.getInt("id"));
+            task.setName(rs.getString("name"));
+            task.setDate(rs.getDate("estimation_time"));
+            task.setPriority(rs.getString("priority"));
+            task.setDone(rs.getBoolean("done"));
+            result.add(task);
+        }
+
+        return result;
     }
 }

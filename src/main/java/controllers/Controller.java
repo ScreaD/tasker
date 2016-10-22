@@ -7,6 +7,7 @@ import views.View;
 import java.sql.Date;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.InputMismatchException;
 import java.util.List;
 
 public abstract class Controller {
@@ -37,7 +38,7 @@ public abstract class Controller {
                 .append("4) На екране можно вернуться в основе меню/екран")
                 .append("\n\nСписок заданий:");
 
-        List<Task> tasks = taskManager.getAll();
+        List<Task> tasks = taskManager.getAllUndone();
 
         for (Task task : tasks) {
             menu.append("\n\nName: " + task.getName())
@@ -54,7 +55,8 @@ public abstract class Controller {
         List<Task> tasks = taskManager.getAllDone();
 
         for (Task task : tasks) {
-            menu.append("\n\nName: " + task.getName())
+            menu.append("id: ")
+                    .append("\n\nName: " + task.getName())
                     .append("\nEnd date: " + task.getDate())
                     .append("\nPriority: " + task.getPriority());
         }
@@ -77,11 +79,19 @@ public abstract class Controller {
             case 4:
                 menuToMeShowed = doneListTasksMenu();
                 break;
+            case 5:
+                menuToMeShowed = closeTaskMenu();
+                break;
             default:
                 menuToMeShowed = mainMenu();
+                break;
         }
 
         view.showMenu(menuToMeShowed);
+    }
+
+    private String closeTaskMenu() {
+        return "Enter task id: ";
     }
 
     protected void userInputResolver(String userResponse) {
@@ -100,17 +110,60 @@ public abstract class Controller {
             case 4:
                 doneListTasksMenuResolver(userResponse);
                 break;
+            case 5:
+                closeTaskMenuResolver(userResponse);
+                break;
         }
     }
 
-    private void doneListTasksMenuResolver(String userResponse) {
+    private void closeTaskMenuResolver(String userResponse) {
+        userResponse = parseResponse(userResponse);
+        Integer id = Integer.parseInt(userResponse);
 
+        if (!taskManager.makeTaskDone(id)) {
+            incorrectInput();
+        }
+
+        level = 3;
+    }
+
+    private void doneListTasksMenuResolver(String userResponse) {
+        userResponse = parseResponse(userResponse);
+
+        switch (userResponse) {
+            case "1":
+                level = 3;
+                break;
+            case "2":
+                level = 1;
+                break;
+            default:
+                incorrectInput();
+                break;
+        }
     }
 
     private void taskListMenuResolver(String userResponse) {
+        userResponse = parseResponse(userResponse);
+
+        switch (userResponse) {
+            case "1":
+                level = 5;
+                break;
+            case "2":
+                level = 4;
+                break;
+            case "3":
+                level = 1;
+                break;
+            default:
+                incorrectInput();
+                break;
+        }
     }
 
     private void addTaskMenuResolver(String userResponse) {
+        userResponse = parseResponse(userResponse);
         Task task = new Task();
 
         String[] params = userResponse.split(";");
@@ -118,12 +171,12 @@ public abstract class Controller {
             task.setName(params[0]);
             task.setDate(parseDate(params[1]));
             task.setPriority(params[2]);
+            taskManager.add(task);
         } else {
             incorrectInput();
             level = 2;
         }
 
-        taskManager.add(task);
         level = 1;
     }
 
@@ -152,6 +205,7 @@ public abstract class Controller {
             default:
                 incorrectInput();
                 level = 1;
+                break;
         }
     }
 

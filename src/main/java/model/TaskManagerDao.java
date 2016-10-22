@@ -55,16 +55,43 @@ public final class TaskManagerDao implements TaskManager {
 
     @Override
     public boolean makeTaskDone(int id) {
+        Task task = null;
+        try {
+            task = taskDao.get(id);
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
+        }
+        if (task != null) {
+            task.setDone(true);
+            try {
+                taskDao.update(task.getId(), task);
+                return true;
+            } catch (SQLException e) {
+                e.printStackTrace();
+                return false;
+            }
+        }
         return false;
     }
 
     @Override
     public List<Task> getAllDone() {
-        return null;
+        try {
+            return taskDao.getAllIsDone(true);
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return null;
+        }
     }
 
     @Override
     public List<Task> getAllUndone() {
-        return null;
+        try {
+            return taskDao.getAllIsDone(false);
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return null;
+        }
     }
 }

@@ -14,4 +14,8 @@ public interface TaskDao {
     Task get(int id) throws SQLException;
 
     boolean delete(int id) throws SQLException;
+
+    void update(int id, Task to) throws SQLException;
+
+    List<Task> getAllIsDone(boolean done) throws SQLException;
 }
