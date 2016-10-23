@@ -19,6 +19,33 @@ public abstract class Controller {
     protected int level;
     protected TaskManager taskManager;
 
+    protected void printCurrentMenu() {
+        String menuToMeShowed;
+
+        switch (level) {
+            case 1:
+                menuToMeShowed = mainMenu();
+                break;
+            case 2:
+                menuToMeShowed = addTaskMenu();
+                break;
+            case 3:
+                menuToMeShowed = taskListMenu();
+                break;
+            case 4:
+                menuToMeShowed = doneListTasksMenu();
+                break;
+            case 5:
+                menuToMeShowed = closeTaskMenu();
+                break;
+            default:
+                menuToMeShowed = mainMenu();
+                break;
+        }
+
+        view.showMessage(menuToMeShowed);
+    }
+
     private String mainMenu() {
         return MAIN_MENU;
     }
@@ -67,33 +94,6 @@ public abstract class Controller {
         menu.append(LIST_COMPLETED_TASK_MENU);
 
         return menu.toString();
-    }
-
-    protected void printCurrentMenu() {
-        String menuToMeShowed;
-
-        switch (level) {
-            case 1:
-                menuToMeShowed = mainMenu();
-                break;
-            case 2:
-                menuToMeShowed = addTaskMenu();
-                break;
-            case 3:
-                menuToMeShowed = taskListMenu();
-                break;
-            case 4:
-                menuToMeShowed = doneListTasksMenu();
-                break;
-            case 5:
-                menuToMeShowed = closeTaskMenu();
-                break;
-            default:
-                menuToMeShowed = mainMenu();
-                break;
-        }
-
-        view.showMessage(menuToMeShowed);
     }
 
     private String closeTaskMenu() {
@@ -205,12 +205,6 @@ public abstract class Controller {
         }
     }
 
-    private Date parseDate(String date) throws ParseException {
-        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
-        java.util.Date parsed = format.parse(date);
-        return new Date(parsed.getTime());
-    }
-
     private void mainMenuResolver(String userResponse) {
         switch (userResponse) {
             case "1":
@@ -232,8 +226,26 @@ public abstract class Controller {
         view.showMessage(INCORRECT_INPUT);
     }
 
+    private Date parseDate(String date) throws ParseException {
+        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+        java.util.Date parsed = format.parse(date);
+        return new Date(parsed.getTime());
+    }
+
+    /**
+     * This method is need for parsing user response.
+     * App supports only certain data type.
+     * Note. User response is depended of the type of app you will create.
+     * Example: web app will produce XML (HTML) or json.
+     * @param userResponse
+     * @return parsed string, that contains only data
+     */
     protected abstract String parseResponse(String userResponse);
 
+    /**
+     * Creating main loop of the app, where you should accept new users,
+     * show menu and handle user response
+     */
     public abstract void run();
 
 }
